@@ -1,9 +1,78 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import './SignUp.css';
+import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
+import auth from '../../firebase.init';
 const SignUp = () => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [error, setError] = useState('');
+    const navigate = useNavigate();
+    const [createUserWithEmailAndPassword, user] = useCreateUserWithEmailAndPassword(auth)
+
+    const handleEmailBlur = event => {
+        setEmail(event.target.value);
+    }
+
+    const handlePasswordBlur = event => {
+        setPassword(event.target.value);
+    }
+
+    const handleConfirmPasswordBlur = event => {
+        setConfirmPassword(event.target.value);
+    }
+
+    if (user) {
+        navigate('/inventory');
+    }
+
+    const handleCreateUser = event => {
+        event.preventDefault();
+        if (password !== confirmPassword) {
+            setError('Passwords does not match.');
+            console.log(password);
+            console.log(confirmPassword);
+            return;
+        }
+        if (password.length < 6) {
+            setError('Password must be 6 characters or longer.');
+            return;
+        }
+        createUserWithEmailAndPassword(email, password);
+    }
     return (
-        <div>
-            <h2>This is Sign Up</h2>
+        <div className='form-container'>
+            <div>
+                <h2 className='form-title'>Sign Up</h2>
+                <form onSubmit={handleCreateUser}>
+                    <div className="input-group">
+                        <label htmlFor="email">Email</label>
+                        <input onBlur={handleEmailBlur} type="email" name='email' id='' required />
+                    </div>
+                    <div className="input-group">
+                        <label htmlFor="password">Password</label>
+                        <input onBlur={handlePasswordBlur} type="password" name="" id="" required />
+                    </div>
+                    <div className="input-group">
+                        <label htmlFor="password">Confirm Password</label>
+                        <input onBlur={handleConfirmPasswordBlur} type="password" name="" id="" required />
+                    </div>
+                    <p style={{ color: 'red' }}>{error}</p>
+                    <input className='form-submit' type="submit" value="Sign Up" />
+                </form>
+                <p>
+                    Already have an account? <Link className='form-link' to='/signup'>Login</Link>
+                </p>
+                <div className='form-line'>
+                    <div className="line"></div>
+                    <div><p><small>or</small></p></div>
+                    <div className="line"></div>
+                </div>
+            </div>
+            {/* <p>
+                New to Ema-John? <Link className='form-link' to='/signup'>Create an account</Link>
+            </p> */}
         </div>
     );
 };

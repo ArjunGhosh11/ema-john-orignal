@@ -43,10 +43,34 @@
     border: none;
     background-color: rgba(255, 153, 0, 0.3);
     font-size: 20px;
+    cursor: pointer;
 
+}
+
+.form-submit:hover {
+    background-color: rgba(255, 153, 0, 0.5);
 }
 
 .form-link {
     color: #ff9900;
     text-decoration: none;
+}
+
+.form-line {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.form-line p {
+    color: #95A0A7;
+    font-size: 20px;
+    margin: 10px 25px;
+}
+
+.line {
+    background: rgba(149, 160, 167, 1);
+    height: 0;
+    width: 145px;
+    border: 1px solid #95A0A7;
 }
